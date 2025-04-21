@@ -1,0 +1,27 @@
+-- Auto Parry Blade Ball (Delta Executor Script)
+
+getgenv().AutoParry = true
+
+local function AutoParryBladeBall()
+    local Players = game:GetService("Players")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+    local Ball = workspace:WaitForChild("Ball")
+    local ParryRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Parry")
+
+    while getgenv().AutoParry do
+        task.wait()
+        local ballDistance = (Ball.Position - HumanoidRootPart.Position).Magnitude
+        if ballDistance < 20 then
+            ParryRemote:FireServer()
+        end
+    end
+end
+
+pcall(function()
+    setfpscap(500)
+end)
+
+spawn(AutoParryBladeBall)
